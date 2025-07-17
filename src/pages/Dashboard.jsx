@@ -1,13 +1,12 @@
 import StatCard from '../components/StatCard';
-import { mockTransactions } from '../data/mockData';
 
-const Dashboard = () => {
+const Dashboard = ({ transactions }) => {
   // Calculate financial statistics
-  const totalIncome = mockTransactions
+  const totalIncome = transactions
     .filter(t => t.type === 'income')
     .reduce((sum, t) => sum + t.amount, 0);
   
-  const totalExpenses = mockTransactions
+  const totalExpenses = transactions
     .filter(t => t.type === 'expense')
     .reduce((sum, t) => sum + Math.abs(t.amount), 0);
   
@@ -80,7 +79,7 @@ const Dashboard = () => {
         </div>
         
         <div className="space-y-4">
-          {mockTransactions.slice(0, 5).map((transaction) => (
+          {transactions.slice(0, 5).map((transaction) => (
             <div key={transaction.id} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg">
               <div className="flex items-center">
                 <div className="text-2xl mr-3">{transaction.icon}</div>
