@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const Layout = ({ children, onAddTransaction }) => {
+const Layout = ({ children, onAddTransaction, isDarkMode, setIsDarkMode }) => {
   const [activeTab, setActiveTab] = useState('dashboard');
 
   const navigation = [
@@ -9,16 +9,33 @@ const Layout = ({ children, onAddTransaction }) => {
     { id: 'insights', name: 'Insights', icon: '📈' },
   ];
 
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  // Apply dark mode to body
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add('dark');
+      document.body.style.backgroundColor = '#111827';
+      document.documentElement.style.backgroundColor = '#111827';
+    } else {
+      document.body.classList.remove('dark');
+      document.body.style.backgroundColor = '#f9fafb';
+      document.documentElement.style.backgroundColor = '#f9fafb';
+    }
+  }, [isDarkMode]);
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <header className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'} shadow-sm border-b w-full`}>
+        <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
                 <span className="text-2xl">💰</span>
-                <h1 className="ml-2 text-xl font-bold text-gray-900">BudgetPro</h1>
+                <h1 className={`ml-2 text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>BudgetPro</h1>
               </div>
             </div>
             
@@ -31,7 +48,7 @@ const Layout = ({ children, onAddTransaction }) => {
                   className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     activeTab === item.id
                       ? 'bg-blue-100 text-blue-700'
-                      : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                      : `${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-gray-700' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'}`
                   }`}
                 >
                   <span className="mr-2">{item.icon}</span>
@@ -48,8 +65,11 @@ const Layout = ({ children, onAddTransaction }) => {
               >
                 + Add Transaction
               </button>
-              <button className="p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100">
-                🌙
+              <button 
+                onClick={toggleDarkMode}
+                className={`p-2 rounded-md ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-gray-700' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'}`}
+              >
+                {isDarkMode ? '☀️' : '🌙'}
               </button>
             </div>
           </div>
@@ -57,8 +77,12 @@ const Layout = ({ children, onAddTransaction }) => {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {children}
+      <main className="px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto">
+          <div className={isDarkMode ? 'text-white' : 'text-gray-900'}>
+            {children}
+          </div>
+        </div>
       </main>
     </div>
   );

@@ -1,6 +1,6 @@
-const Card = ({ children, className = "" }) => {
+const Card = ({ children, className = "", isDarkMode = false }) => {
   return (
-    <div className={`bg-white rounded-lg shadow-md p-6 ${className}`}>
+    <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-sm p-6 ${className}`}>
       {children}
     </div>
   );

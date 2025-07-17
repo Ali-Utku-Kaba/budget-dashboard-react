@@ -8,6 +8,7 @@ import './App.css';
 function App() {
   const [transactions, setTransactions] = useState(mockTransactions);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const handleAddTransaction = (newTransaction) => {
     const categoryIcon = {
@@ -33,14 +34,19 @@ function App() {
 
   return (
     <>
-      <Layout onAddTransaction={() => setIsModalOpen(true)}>
-        <Dashboard transactions={transactions} />
+      <Layout 
+        onAddTransaction={() => setIsModalOpen(true)}
+        isDarkMode={isDarkMode}
+        setIsDarkMode={setIsDarkMode}
+      >
+        <Dashboard transactions={transactions} isDarkMode={isDarkMode} />
       </Layout>
       
       <TransactionModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleAddTransaction}
+        isDarkMode={isDarkMode}
       />
     </>
   );

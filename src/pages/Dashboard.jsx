@@ -1,6 +1,8 @@
 import StatCard from '../components/StatCard';
+import ExpenseChart from '../components/ExpenseChart';
+import TrendChart from '../components/TrendChart';
 
-const Dashboard = ({ transactions }) => {
+const Dashboard = ({ transactions, isDarkMode = false }) => {
   // Calculate financial statistics
   const totalIncome = transactions
     .filter(t => t.type === 'income')
@@ -16,8 +18,8 @@ const Dashboard = ({ transactions }) => {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600 mt-2">Overview of your financial activities and insights</p>
+        <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Dashboard</h1>
+        <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mt-2`}>Overview of your financial activities and insights</p>
       </div>
 
       {/* Stats Grid */}
@@ -28,6 +30,7 @@ const Dashboard = ({ transactions }) => {
           change="+1.2%"
           changeType="positive"
           icon="💰"
+          isDarkMode={isDarkMode}
         />
         <StatCard
           title="Monthly Income"
@@ -35,6 +38,7 @@ const Dashboard = ({ transactions }) => {
           change="+12.5%"
           changeType="positive"
           icon="📈"
+          isDarkMode={isDarkMode}
         />
         <StatCard
           title="Monthly Expenses"
@@ -42,6 +46,7 @@ const Dashboard = ({ transactions }) => {
           change="+8.3%"
           changeType="negative"
           icon="📉"
+          isDarkMode={isDarkMode}
         />
         <StatCard
           title="Savings Rate"
@@ -49,43 +54,40 @@ const Dashboard = ({ transactions }) => {
           change="Excellent"
           changeType="positive"
           icon="📊"
+          isDarkMode={isDarkMode}
         />
       </div>
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold mb-4">Expense Distribution</h3>
-          <div className="h-64 flex items-center justify-center text-gray-500">
-            Chart will be implemented here
-          </div>
+        <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-sm p-6`}>
+          <h3 className={`text-lg font-semibold mb-4 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Expense Distribution</h3>
+          <ExpenseChart transactions={transactions} />
         </div>
         
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold mb-4">Income vs Expenses Trend</h3>
-          <div className="h-64 flex items-center justify-center text-gray-500">
-            Chart will be implemented here
-          </div>
+        <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-sm p-6`}>
+          <h3 className={`text-lg font-semibold mb-4 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Income vs Expenses Trend</h3>
+          <TrendChart />
         </div>
       </div>
 
       {/* Recent Transactions */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">Recent Transactions</h3>
-          <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+      <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-sm p-6`}>
+        <div className="flex justify-between items-center mb-6">
+          <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Recent Transactions</h3>
+          <button className="text-blue-600 hover:text-blue-800 text-sm font-medium border border-blue-600 px-3 py-1 rounded">
             View All
           </button>
         </div>
         
-        <div className="space-y-4">
-          {transactions.slice(0, 5).map((transaction) => (
-            <div key={transaction.id} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg">
+        <div className="space-y-0">
+          {transactions.slice(0, 5).map((transaction, index) => (
+            <div key={transaction.id} className={`flex items-center justify-between p-4 ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'} ${index < 4 ? (isDarkMode ? 'border-b border-gray-700' : 'border-b border-gray-200') : ''}`}>
               <div className="flex items-center">
-                <div className="text-2xl mr-3">{transaction.icon}</div>
+                <div className="text-2xl mr-4">{transaction.icon}</div>
                 <div>
-                  <p className="font-medium text-gray-900">{transaction.title}</p>
-                  <p className="text-sm text-gray-500">{transaction.category} • {transaction.date}</p>
+                  <p className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{transaction.title}</p>
+                  <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>{transaction.category} • {transaction.date}</p>
                 </div>
               </div>
               <div className={`font-semibold ${
