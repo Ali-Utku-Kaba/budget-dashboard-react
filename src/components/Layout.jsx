@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const Layout = ({ children, onAddTransaction, isDarkMode, setIsDarkMode }) => {
-  const [activeTab, setActiveTab] = useState('dashboard');
-
+const Layout = ({ children, onAddTransaction, isDarkMode, setIsDarkMode, activeTab, setActiveTab }) => {
   const navigation = [
     { id: 'dashboard', name: 'Dashboard', icon: '📊' },
     { id: 'transactions', name: 'Transactions', icon: '💳' },
