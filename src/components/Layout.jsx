@@ -26,8 +26,8 @@ const Layout = ({ children, onAddTransaction, isDarkMode, setIsDarkMode, activeT
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-      {/* Header */}
-      <header className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'} shadow-sm border-b w-full`}>
+      {/* Header - Fixed and Full Width */}
+      <header className={`fixed top-0 left-0 right-0 z-50 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'} shadow-sm border-b`}>
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
@@ -74,8 +74,8 @@ const Layout = ({ children, onAddTransaction, isDarkMode, setIsDarkMode, activeT
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="px-4 sm:px-6 lg:px-8 py-8">
+      {/* Main Content - Add top padding to account for fixed header */}
+      <main className="pt-16 px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-7xl mx-auto">
           <div className={isDarkMode ? 'text-white' : 'text-gray-900'}>
             {children}

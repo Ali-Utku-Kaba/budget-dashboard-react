@@ -37,12 +37,12 @@ export const mockTransactions = [
   },
   {
     id: 5,
-    title: "Freelance Project",
-    amount: 1200.00,
-    type: "income",
-    category: "Freelance",
+    title: "Spotify Premium",
+    amount: -9.99,
+    type: "expense",
+    category: "Entertainment",
     date: "2024-01-10",
-    icon: "💻"
+    icon: "🎵"
   },
   {
     id: 6,

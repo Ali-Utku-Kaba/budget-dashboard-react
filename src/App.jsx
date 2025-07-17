@@ -23,8 +23,7 @@ function App() {
       'Health & Fitness': '🏋️',
       'Education': '📚',
       'Other': '📋',
-      'Salary': '💰',
-      'Freelance': '💻'
+      'Salary': '💰'
     };
 
     const transactionWithIcon = {
@@ -42,7 +41,7 @@ function App() {
   const renderCurrentPage = () => {
     switch (activeTab) {
       case 'dashboard':
-        return <Dashboard transactions={transactions} isDarkMode={isDarkMode} />;
+        return <Dashboard transactions={transactions} isDarkMode={isDarkMode} onNavigateToTransactions={() => setActiveTab('transactions')} />;
       case 'transactions':
         return <Transactions 
           transactions={transactions} 
