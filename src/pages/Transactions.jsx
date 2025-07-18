@@ -1,11 +1,12 @@
 import React from 'react';
 import { FiTrash2, FiFilter } from 'react-icons/fi';
+import { Add, ArrowUpward, ArrowDownward } from '@mui/icons-material';
 import { categoryIcons } from '../utils/constants';
 import SearchBar from '../components/SearchBar';
-import DateRangeFilter from '../components/DateRangeFilter';
+import DateRangeFilter, { ModernDropdown } from '../components/DateRangeFilter';
 import useFilters from '../hooks/useFilters';
 
-const Transactions = ({ transactions, onDeleteTransaction, isDarkMode }) => {
+const Transactions = ({ transactions, onDeleteTransaction, isDarkMode, onAddTransaction }) => {
   const {
     dateRange,
     setDateRange,
@@ -22,6 +23,19 @@ const Transactions = ({ transactions, onDeleteTransaction, isDarkMode }) => {
 
   const categories = [...new Set(transactions.map(t => t.category))];
 
+  // Type options with arrows
+  const typeOptions = [
+    { value: 'all', label: 'All Types' },
+    { value: 'income', label: 'Income', icon: <ArrowUpward className="w-4 h-4 text-green-600" /> },
+    { value: 'expense', label: 'Expense', icon: <ArrowDownward className="w-4 h-4 text-red-600" /> }
+  ];
+
+  // Category options
+  const categoryOptions = [
+    { value: 'all', label: 'All Categories' },
+    ...categories.map(category => ({ value: category, label: category }))
+  ];
+
   const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to delete this transaction?')) {
       onDeleteTransaction(id);
@@ -30,8 +44,8 @@ const Transactions = ({ transactions, onDeleteTransaction, isDarkMode }) => {
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+      <div className="mb-6 text-left">
+        <h1 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
           Transactions
         </h1>
         <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mt-2`}>
@@ -57,36 +71,21 @@ const Transactions = ({ transactions, onDeleteTransaction, isDarkMode }) => {
             isDarkMode={isDarkMode}
           />
           
-          <select
-            value={selectedType}
-            onChange={(e) => setSelectedType(e.target.value)}
-            className={`px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              isDarkMode 
-                ? 'border-gray-700 bg-gray-800 text-gray-300' 
-                : 'border-gray-300 bg-gray-50 text-gray-700'
-            }`}
-          >
-            <option value="all">All Types</option>
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
-          </select>
+          <ModernDropdown
+            options={typeOptions}
+            selectedValue={selectedType}
+            onValueChange={setSelectedType}
+            placeholder="All Types"
+            isDarkMode={isDarkMode}
+          />
           
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className={`px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              isDarkMode 
-                ? 'border-gray-700 bg-gray-800 text-gray-300' 
-                : 'border-gray-300 bg-gray-50 text-gray-700'
-            }`}
-          >
-            <option value="all">All Categories</option>
-            {categories.map(category => (
-              <option key={category} value={category} className="capitalize">
-                {category}
-              </option>
-            ))}
-          </select>
+          <ModernDropdown
+            options={categoryOptions}
+            selectedValue={selectedCategory}
+            onValueChange={setSelectedCategory}
+            placeholder="All Categories"
+            isDarkMode={isDarkMode}
+          />
           
           {hasActiveFilters() && (
             <button
@@ -110,11 +109,19 @@ const Transactions = ({ transactions, onDeleteTransaction, isDarkMode }) => {
       </div>
 
       {/* Transactions List */}
-      <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-sm`}>
+      <div className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border rounded-lg shadow-sm`}>
         <div className="p-6">
-          <h2 className={`text-xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-            All Transactions
-          </h2>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              All Transactions
+            </h2>
+            <button 
+              onClick={onAddTransaction}
+              className="flex items-center space-x-1 bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm font-medium"
+            >
+              <span>Add+</span>
+            </button>
+          </div>
           
           {filteredTransactions.length === 0 ? (
             <div className="text-center py-12">
@@ -135,7 +142,7 @@ const Transactions = ({ transactions, onDeleteTransaction, isDarkMode }) => {
                 return (
                   <div
                     key={transaction.id}
-                    className={`flex items-center justify-between p-4 ${
+                    className={`flex items-center justify-between p-3 sm:p-4 ${
                       isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
                     } ${
                       index < filteredTransactions.length - 1
@@ -145,30 +152,31 @@ const Transactions = ({ transactions, onDeleteTransaction, isDarkMode }) => {
                         : ''
                     }`}
                   >
-                    <div className="flex items-center flex-1">
-                      <div className={`p-2 rounded-full flex-shrink-0 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                        <Icon className={`text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`} />
+                    <div className="flex items-center flex-1 min-w-0">
+                      <div className={`p-1.5 sm:p-2 rounded-full flex-shrink-0 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
+                        <Icon className={`text-base sm:text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`} />
                       </div>
-                      <div className="flex-1 min-w-0 ml-4">
-                        <h3 className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'} text-left`}>
+                      <div className="flex-1 min-w-0 ml-3 sm:ml-4">
+                        <h3 className={`font-medium text-sm sm:text-base ${isDarkMode ? 'text-white' : 'text-gray-900'} text-left truncate`}>
                           {transaction.title}
                         </h3>
-                        <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'} text-left`}>
-                          {transaction.category} • {transaction.date}
+                        <p className={`text-xs sm:text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'} text-left`}>
+                          <span className="hidden sm:inline">{transaction.category} • {transaction.date}</span>
+                          <span className="sm:hidden">{transaction.category}</span>
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-4 flex-shrink-0">
-                      <div className={`font-semibold text-right ${
+                    <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
+                      <div className={`font-semibold text-right text-sm sm:text-base ${
                         transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
                       }`}>
                         {transaction.type === 'income' ? '+' : '-'}${Math.abs(transaction.amount).toFixed(2)}
                       </div>
                       <button
                         onClick={() => handleDelete(transaction.id)}
-                        className="text-red-500 hover:text-red-700 p-1 rounded transition-colors"
+                        className="text-gray-400 hover:text-red-500 p-1 rounded transition-colors flex-shrink-0"
                       >
-                        <FiTrash2 size={16} />
+                        <FiTrash2 size={14} className="sm:w-4 sm:h-4" />
                       </button>
                     </div>
                   </div>

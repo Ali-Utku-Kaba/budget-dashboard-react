@@ -1,25 +1,26 @@
 import { 
-  FiShoppingCart, 
-  FiTruck, 
-  FiHome, 
-  FiHeart, 
-  FiBook, 
-  FiCoffee, 
-  FiDollarSign,
-  FiMoreHorizontal 
-} from 'react-icons/fi';
+  ShoppingCart, 
+  DirectionsCar, 
+  Home, 
+  Celebration, 
+  School, 
+  Restaurant, 
+  AttachMoney,
+  MoreHoriz,
+  FitnessCenter
+} from '@mui/icons-material';
 
 export const categoryIcons = {
-  'Food & Dining': FiCoffee,
-  'Transportation': FiTruck,
-  'Shopping': FiShoppingCart,
-  'Entertainment': FiHeart,
-  'Bills & Utilities': FiHome,
-  'Health & Fitness': FiHeart,
-  'Education': FiBook,
-  'Income': FiDollarSign,
-  'Other': FiMoreHorizontal,
-  'other': FiMoreHorizontal
+  'Food & Dining': Restaurant,
+  'Transportation': DirectionsCar,
+  'Shopping': ShoppingCart,
+  'Entertainment': Celebration,
+  'Bills & Utilities': Home,
+  'Health & Fitness': FitnessCenter,
+  'Education': School,
+  'Income': AttachMoney,
+  'Other': MoreHoriz,
+  'other': MoreHoriz
 };
 
 export const transactionTypes = {

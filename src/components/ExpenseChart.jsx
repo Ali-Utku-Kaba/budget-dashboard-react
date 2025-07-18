@@ -8,7 +8,7 @@ import {
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const ExpenseChart = ({ transactions }) => {
+const ExpenseChart = ({ transactions, isDarkMode = false }) => {
   // Calculate expense distribution by category
   const expenseData = transactions
     .filter(t => t.type === 'expense')
@@ -56,6 +56,7 @@ const ExpenseChart = ({ transactions }) => {
           padding: 15,
           usePointStyle: true,
           pointStyle: 'circle',
+          color: isDarkMode ? '#ffffff' : '#374151',
           font: {
             size: 12,
             family: 'system-ui, -apple-system, sans-serif'
@@ -66,22 +67,42 @@ const ExpenseChart = ({ transactions }) => {
               return data.labels.map((label, i) => {
                 const dataset = data.datasets[0];
                 const backgroundColor = dataset.backgroundColor[i];
+                const meta = chart.getDatasetMeta(0);
+                const hidden = meta.data[i] && meta.data[i].hidden;
+                
                 return {
                   text: label,
                   fillStyle: backgroundColor,
                   strokeStyle: backgroundColor,
                   lineWidth: 0,
                   pointStyle: 'circle',
-                  hidden: false,
-                  index: i
+                  hidden: hidden,
+                  index: i,
+                  // Add strikethrough for hidden items
+                  textDecoration: hidden ? 'line-through' : 'none',
+                  fontColor: isDarkMode ? '#ffffff' : '#374151'
                 };
               });
             }
             return [];
           }
         },
+        onClick: function(e, legendItem, legend) {
+          const index = legendItem.index;
+          const chart = legend.chart;
+          const meta = chart.getDatasetMeta(0);
+          
+          // Toggle visibility
+          meta.data[index].hidden = !meta.data[index].hidden;
+          chart.update();
+        }
       },
       tooltip: {
+        backgroundColor: isDarkMode ? '#374151' : '#ffffff',
+        titleColor: isDarkMode ? '#ffffff' : '#111827',
+        bodyColor: isDarkMode ? '#ffffff' : '#111827',
+        borderColor: isDarkMode ? '#6B7280' : '#E5E7EB',
+        borderWidth: 1,
         callbacks: {
           label: function(context) {
             const label = context.label || '';
@@ -105,7 +126,7 @@ const ExpenseChart = ({ transactions }) => {
 
   if (Object.keys(expenseData).length === 0) {
     return (
-      <div className="h-64 flex items-center justify-center text-gray-500">
+      <div className={`h-64 flex items-center justify-center ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
         No expense data available
       </div>
     );

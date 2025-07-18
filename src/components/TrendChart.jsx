@@ -41,9 +41,13 @@ const TrendChart = ({ transactions = [], isDarkMode = false }) => {
   const processTransactionData = (transactions, year) => {
     const monthlyData = {};
     
-    // Initialize all 12 months for the year
+    // Initialize months up to July 2025 (current month)
     const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    for (let i = 0; i < 12; i++) {
+    
+    // For 2025, only show up to July (index 6). For other years, show all 12 months
+    const maxMonth = (year === 2025) ? 6 : 11; // July is index 6
+    
+    for (let i = 0; i <= maxMonth; i++) {
       const monthKey = `${year}-${String(i + 1).padStart(2, '0')}`;
       monthlyData[monthKey] = {
         month: monthNames[i],
@@ -69,7 +73,7 @@ const TrendChart = ({ transactions = [], isDarkMode = false }) => {
       }
     });
     
-    // Return all 12 months in order
+    // Return months in order, only up to July for 2025
     return Object.values(monthlyData).sort((a, b) => a.monthIndex - b.monthIndex);
   };
 
