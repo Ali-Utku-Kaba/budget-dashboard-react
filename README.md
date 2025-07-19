@@ -42,11 +42,11 @@ Feedback and ideas are always welcome!
 ### Interactive Chart View (Dark Mode)
 ![Graphics](./screenshots/Graphics.png)
 
-### Financial Insights & Recommendations
+### Financial Insights & Recommendations (Light Mode)
 ![Insights](./screenshots/Insights.png)
 
-### Transactions & Filtering System
-![Transactions](./screenshots/Transactions.png)
+### Transactions & Filtering System (Dark Mode)
+![Transactions](./screenshots/Transactions.png) 
 
 ### Add Transaction Modal (Dark Mode)
 ![AddTransaction](./screenshots/AddTransaction.png)
